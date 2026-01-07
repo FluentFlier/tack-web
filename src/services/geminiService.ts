@@ -1,41 +1,19 @@
 import { SummaryOutput, Source, AIModel } from '@/types';
 import { getCurrentDateTimeString } from '@/utils/time';
 
-// Set the API key provided by the user
-// In a production environment, this would be stored in environment variables
-const GEMINI_API_KEY = 'AIzaSyBsFx_lp0vUmuWU0mjD_hkzY66rSKcPt_8';
+// Get API key from environment variables
+const CEREBRAS_API_KEY = import.meta.env.VITE_CEREBRAS_API_KEY;
+const CEREBRAS_MODEL = import.meta.env.VITE_CEREBRAS_MODEL || 'llama-3.3-70b';
 
 /**
- * Maps the requested model to the appropriate Gemini model
+ * Maps the requested model to the appropriate Cerebras model
  */
-export function mapToGeminiModel(modelId?: string): string {
-  // Default to using the latest model from the API: gemini-2.0-flash
-  let geminiModel = 'gemini-2.0-flash';
-  
-  // Model mapping based on user selection
-  if (modelId) {
-    switch(modelId) {
-      case 'gemini':
-        geminiModel = 'gemini-2.0-flash';
-        break;
-      case 'mistral':
-      case 'perplexity':
-      case 'claude':
-      case 'llama':
-        // For these models we'll use gemini-2.0-pro
-        geminiModel = 'gemini-2.0-pro';
-        break;
-      case 'chatgpt':
-        // For ChatGPT option we'll use the most powerful model
-        geminiModel = 'gemini-2.0-pro';
-        break;
-      default:
-        geminiModel = 'gemini-2.0-flash';
-    }
-  }
+export function mapToCerebrasModel(modelId?: string): string {
+  // Use the configured Cerebras model (llama-3.3-70b)
+  const cerebrasModel = CEREBRAS_MODEL;
 
-  console.log(`Using Gemini model: ${geminiModel}`);
-  return geminiModel;
+  console.log(`Using Cerebras model: ${cerebrasModel}`);
+  return cerebrasModel;
 }
 
 /**
@@ -126,44 +104,58 @@ function getModelEmulationInstructions(modelId?: string): string {
 }
 
 /**
- * Calls the Gemini API for content summarization
+ * Calls the Cerebras API for content summarization
  */
 export async function callGeminiApi(prompt: string, modelId?: string): Promise<any> {
-  if (!GEMINI_API_KEY) {
-    throw new Error('Gemini API key is not configured');
+  if (!CEREBRAS_API_KEY) {
+    throw new Error('Cerebras API key is not configured. Please set VITE_CEREBRAS_API_KEY environment variable.');
   }
 
-  const geminiModel = mapToGeminiModel(modelId);
-  console.log(`Making API request to Gemini with model: ${geminiModel}`);
-  
+  const cerebrasModel = mapToCerebrasModel(modelId);
+  console.log(`Making API request to Cerebras with model: ${cerebrasModel}`);
+
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${GEMINI_API_KEY}`, {
+    const response = await fetch('https://api.cerebras.ai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${CEREBRAS_API_KEY}`,
       },
       body: JSON.stringify({
-        contents: [{
-          parts: [{ text: prompt }]
-        }],
-        generationConfig: {
-          temperature: 0.2, // Lower temperature for more direct answers
-          maxOutputTokens: 800,
-        }
+        model: cerebrasModel,
+        messages: [
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        temperature: 0.2,
+        max_tokens: 800,
+        stream: false
       }),
     });
 
     if (!response.ok) {
       const errorData = await response.text();
-      console.error('Gemini API error response:', errorData);
-      throw new Error(`Gemini API request failed: ${response.status} ${errorData}`);
+      console.error('Cerebras API error response:', errorData);
+      throw new Error(`Cerebras API request failed: ${response.status} ${errorData}`);
     }
 
     const data = await response.json();
-    console.log('Successful response from Gemini API');
-    return data;
+    console.log('Successful response from Cerebras API');
+
+    // Transform Cerebras response to match expected format
+    return {
+      candidates: [{
+        content: {
+          parts: [{
+            text: data.choices[0].message.content
+          }]
+        }
+      }]
+    };
   } catch (error) {
-    console.error('Error calling Gemini API:', error);
+    console.error('Error calling Cerebras API:', error);
     throw error; // Rethrow to be handled by the caller
   }
 }

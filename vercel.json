@@ -1,0 +1,16 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    }
+  ],
+  "env": {
+    "VITE_CLERK_PUBLISHABLE_KEY": "@clerk-publishable-key",
+    "VITE_CEREBRAS_API_KEY": "@cerebras-api-key",
+    "VITE_CEREBRAS_MODEL": "llama-3.3-70b"
+  }
+}

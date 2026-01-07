@@ -62,8 +62,39 @@ This project is built with .
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/743521ad-62c0-4bf4-90db-a52839df4c3e) and click on Share -> Publish.
+### Deploy to Vercel (Recommended)
+
+This project is configured for Vercel deployment with Cerebras AI integration.
+
+1. **Quick Deploy**:
+   - Fork this repository
+   - Import it to Vercel at https://vercel.com/new
+   - Add the required environment variables (see below)
+   - Click Deploy
+
+2. **Detailed Instructions**: See [DEPLOYMENT.md](./DEPLOYMENT.md) for complete deployment guide
+
+### Required Environment Variables
+
+Set these in your Vercel project settings:
+
+- `VITE_CEREBRAS_API_KEY` - Your Cerebras API key (get it from https://cloud.cerebras.ai/)
+- `VITE_CEREBRAS_MODEL` - Model to use (default: `llama-3.3-70b`)
+- `VITE_CLERK_PUBLISHABLE_KEY` - Your Clerk authentication key
+
+### Alternative: Deploy via Lovable
+
+You can also open [Lovable](https://lovable.dev/projects/743521ad-62c0-4bf4-90db-a52839df4c3e) and click on Share -> Publish.
+
+## Features
+
+- **AI-Powered Text Analysis** using Cerebras AI (LLaMA 3.3 70B model)
+- **URL Content Summarization** - Analyze content from any URL
+- **Chat History** - Keep track of your conversations
+- **Authentication** via Clerk
+- **Text-to-Speech** support for accessibility
+- **Dark/Light Mode** theme support
 
 ## I want to use a custom domain - is that possible?
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+Vercel supports custom domains. After deploying to Vercel, go to your project settings and add your custom domain. See [Vercel's custom domain documentation](https://vercel.com/docs/concepts/projects/custom-domains) for details.
