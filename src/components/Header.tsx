@@ -54,24 +54,20 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="w-full glass sticky top-0 z-50 py-4 shadow-lg animate-slide-down">
+    <header className="w-full bg-background border-b border-border sticky top-0 z-50 py-4 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           {/* Logo and Title */}
-          <div className="flex md:ml-[280px] items-center gap-4 transition-all duration-300">
+          <div className="flex md:ml-[280px] items-center gap-4">
             <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full"></div>
-                <div className="relative bg-gradient-primary p-2.5 rounded-xl shadow-lg">
-                  <UserButton/>
-                </div>
+              <div className="bg-primary p-2 rounded-lg">
+                <UserButton/>
               </div>
               <div>
-                <h1 className="text-xl md:text-2xl font-bold tracking-tight flex items-center gap-0.5">
-                  <span className="gradient-text">Tack</span>
-                  <span className="gradient-text">Insight</span>
+                <h1 className="text-xl md:text-2xl font-bold tracking-tight text-foreground">
+                  TackInsight
                 </h1>
-                <p className="text-muted-foreground text-xs md:text-sm font-medium">
+                <p className="text-muted-foreground text-xs md:text-sm">
                   AI-Powered Accessibility
                 </p>
               </div>
@@ -86,13 +82,13 @@ const Header: React.FC = () => {
             {isMobile ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="gap-2 glass-card">
+                  <Button variant="outline" className="gap-2">
                     <Settings className="h-4 w-4" aria-hidden="true" />
                     <span>Settings</span>
                     <ChevronDown className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 glass-card">
+                <DropdownMenuContent className="w-56">
                   <DropdownMenuLabel>AI Model</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {AVAILABLE_MODELS.map((model) => (
@@ -102,7 +98,7 @@ const Header: React.FC = () => {
                       >
                         {model.name}
                       </DropdownMenuSubTrigger>
-                      <DropdownMenuSubContent className="glass-card">
+                      <DropdownMenuSubContent>
                         <DropdownMenuRadioGroup
                           value={activeModel === model.id ? activeSubModel || "" : ""}
                           onValueChange={handleSubModelSelect}
@@ -159,7 +155,7 @@ const Header: React.FC = () => {
                       type="single"
                       value={activeModel}
                       onValueChange={(value) => value && handleModelSelect(value as AIModel)}
-                      className="bg-muted/50 p-1 rounded-lg"
+                      className="bg-muted p-1 rounded-lg border border-border"
                     >
                       {AVAILABLE_MODELS.map((model) => (
                         <ToggleGroupItem
@@ -167,7 +163,7 @@ const Header: React.FC = () => {
                           value={model.id}
                           aria-checked={activeModel === model.id}
                           aria-label={`Use ${model.name} model: ${model.description}`}
-                          className="transition-all duration-300 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+                          className="data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
                         >
                           {model.name}
                         </ToggleGroupItem>
@@ -178,12 +174,12 @@ const Header: React.FC = () => {
                   {activeModel && (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" className="text-xs h-7 px-2 hover:bg-accent">
+                        <Button variant="ghost" size="sm" className="text-xs h-7 px-2">
                           {AVAILABLE_MODELS.find(m => m.id === activeModel)?.subModels?.find(s => s.id === activeSubModel)?.name || "Select variant"}
                           <ChevronDown className="h-3 w-3 ml-1" aria-hidden="true" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-56 glass-card">
+                      <DropdownMenuContent align="end" className="w-56">
                         <DropdownMenuLabel>Model Variant</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuRadioGroup
@@ -211,9 +207,9 @@ const Header: React.FC = () => {
                 </div>
 
                 {/* TTS Toggle */}
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-muted/50 rounded-lg">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-muted rounded-lg border border-border">
                   <Volume2 className="h-4 w-4 text-muted-foreground" />
-                  <label htmlFor="tts-toggle" className="text-xs font-medium text-muted-foreground">TTS</label>
+                  <label htmlFor="tts-toggle" className="text-xs font-medium">TTS</label>
                   <Switch
                     id="tts-toggle"
                     checked={ttsEnabled}
