@@ -20,5 +20,18 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: './' // Add this line for GitHub Pages compatibility
+  base: '/', // Base path for deployment
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-tabs'],
+          'pdf-vendor': ['pdfjs-dist'],
+          'clerk-vendor': ['@clerk/clerk-react'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
 }));

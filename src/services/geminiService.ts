@@ -1,9 +1,8 @@
 import { SummaryOutput, Source, AIModel } from '@/types';
 import { getCurrentDateTimeString } from '@/utils/time';
 
-// Set the API key provided by the user
-// In a production environment, this would be stored in environment variables
-const GEMINI_API_KEY = 'AIzaSyBsFx_lp0vUmuWU0mjD_hkzY66rSKcPt_8';
+// Get API key from environment variables
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 /**
  * Maps the requested model to the appropriate Gemini model

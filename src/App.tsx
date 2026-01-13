@@ -17,8 +17,8 @@ import { POST as speechPost } from "./pages/api/speech";
 import { GET as sessionsGet, POST as sessionsPost } from "./pages/api/sessions";
 import { GET as historyGet, POST as historyPost } from "./pages/api/history";
 
-// Replace with your actual Clerk publishable key
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || "pk_test_ZWFzeS1zcGFycm93LTc5LmNsZXJrLmFjY291bnRzLmRldiQ";
+// Get Clerk publishable key from environment variables
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 const queryClient = new QueryClient();
 
